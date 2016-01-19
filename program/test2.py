@@ -34,6 +34,7 @@ class Nodeclass :
 
 SCR_WIDTH,SCR_HEIGHT = 1280,960
 pygame.init()
+node_size = 20
 screen = pygame.display.set_mode((SCR_WIDTH,SCR_HEIGHT))
 pygame.display.set_caption(u"test")
 vx = vy = 120  # 1秒間の移動ピクセル
@@ -44,14 +45,14 @@ screen.fill((255,255,255))
 node = []
 
 for var in range(0,10):
-	x = random.randint(10,SCR_WIDTH - 10)
-	y = random.randint(10,SCR_HEIGHT - 10)
+	x = random.randint(node_size,SCR_WIDTH - node_size)
+	y = random.randint(node_size,SCR_HEIGHT - node_size)
 
 	node.append(Nodeclass())
 	node[var].setX(x)
 	node[var].setY(y)
-	pygame.draw.circle(screen,(0,0,0),(x,y),10)	#塗りつぶしなし
-#	pygame.draw.circle(screen,(0,0,0),(x,y),10,1)	#塗りつぶし
+	pygame.draw.circle(screen,(0,0,0),(x,y),node_size)	#塗りつぶしなし
+#	pygame.draw.circle(screen,(0,0,0),(x,y),node_size,1)	#塗りつぶし
 
 
 

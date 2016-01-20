@@ -28,13 +28,74 @@ class Nodeclass :
 	def getDest(self,portnum):
 		return self.dest[portnum]
 
-###############################################################
+#############################################################################################################################
+def draw_Line(nodeA,nodeB):
+ 	pygame.draw.line(screen, (0,0,0), (node[nodeA].getX(),node[nodeA].getY()), (node[nodeB].getX(),node[nodeB].getY()))
+
+def set_destNode(nodeA,nodeB):
+	node[nodeA].setDest(nodeB)
+	node[nodeB].setDest(nodeA)
+
+def make_node(SCR_WIDTH,SCR_HEIGHT,node,nodex,nodey):
+	node_size = 20
+	node_num = 0
+	dist = 10
+	for vary in range(0,nodey):
+		for varx in range (0,nodex):
+			x =10  + node_size * 2 + varx * node_size * dist
+			y =10  + node_size * 2 + vary * node_size * dist
+
+			node.append(Nodeclass())
+			node[node_num].setX(x)
+			node[node_num].setY(y)
+			node_num += 1
+			pygame.draw.circle(screen,(0,0,0),(x,y),node_size)	#塗りつぶしなし
+	print (node_num)
+#辺を作成していく
+###########################木の作成##################################
+	for num in range(0,nodex*nodey):
+		flg = 0
+		while flg <= 1:
+			flg2 = 0
+			destNode = random.randint(0,nodex*nodey - 1)
+			if num == destNode :
+				flg2 = 1
+		
+			if node[num].getN() != 0:
+				for port in range(0,node[num].getN()):
+					if node[num].getDest(port) == destNode :
+						flg2 = 1
+
+
+			if flg2 == 0 :
+				set_destNode(num,destNode)
+				draw_Line(num,destNode)
+				flg += 1
+
+			
+
+			print (str(num) + " -> " + str(destNode))
 
 
 
-SCR_WIDTH,SCR_HEIGHT = 1280,960
+
+
+
+
+
+
+
+
+#############################################################################################################################
+
+
+
+
+
+
+
 pygame.init()
-node_size = 20
+SCR_WIDTH,SCR_HEIGHT = 1280,960
 screen = pygame.display.set_mode((SCR_WIDTH,SCR_HEIGHT))
 pygame.display.set_caption(u"test")
 vx = vy = 120  # 1秒間の移動ピクセル
@@ -43,55 +104,11 @@ clock = pygame.time.Clock()
 #背景色
 screen.fill((255,255,255))
 node = []
+nodex = 5
+nodey = 5
+node_num = nodex * nodey
 
-for var in range(0,10):
-	x = random.randint(node_size,SCR_WIDTH - node_size)
-	y = random.randint(node_size,SCR_HEIGHT - node_size)
-
-	node.append(Nodeclass())
-	node[var].setX(x)
-	node[var].setY(y)
-	pygame.draw.circle(screen,(0,0,0),(x,y),node_size)	#塗りつぶしなし
-#	pygame.draw.circle(screen,(0,0,0),(x,y),node_size,1)	#塗りつぶし
-
-
-
-#辺を作成していく
-flg = 1
-flg2 = 0
-###########################木の作成##################################
-while flg != 0:
-	flg = 0
-	nodeA = 1
-	nodeB = 1
-	while nodeA == nodeB :
-		nodeA = random.randint(0,var)
-		nodeB = random.randint(0,var)
-
-	print (str(nodeA) + " : " +str(node[nodeA].getN()))
-	if node[nodeA].getN() != 0:
-		for port in range(0,node[nodeA].getN()):
-			if node[nodeA].getDest(port) == nodeB :
-				flg2 = 1
-				break
-		
-		
-		if flg2 == 0:
-			node[nodeA].setDest(nodeB)
-			node[nodeB].setDest(nodeA)
- 			pygame.draw.line(screen, (0,0,0), (node[nodeA].getX(),node[nodeA].getY()), (node[nodeB].getX(),node[nodeB].getY()))
-
-		flg2 = 0
-
-	else:	
-		node[nodeA].setDest(nodeB)
-		node[nodeB].setDest(nodeA)
-		pygame.draw.line(screen, (0,0,0), (node[nodeA].getX(),node[nodeA].getY()), (node[nodeB].getX(),node[nodeB].getY()))
-
-	for i in range(0,var):
-		if node[i].getN() == 0:
-			flg += 1
-
+make_node(SCR_WIDTH,SCR_HEIGHT,node,nodex,nodey)
 #表示
 pygame.display.update()
 

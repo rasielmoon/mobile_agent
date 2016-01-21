@@ -36,63 +36,87 @@ def set_destNode(nodeA,nodeB):
 	node[nodeA].setDest(nodeB)
 	node[nodeB].setDest(nodeA)
 
+def draw_node(SCR_WIDTH,SCR_HEIGHT,node,nodex,nodey):
+	node_size = 20
+	dist = 10
+
+	for vary in range(0,nodey):
+		for varx in range(0,nodex):
+			x =10  + node_size * 2 + varx * node_size * dist
+			y =10  + node_size * 2 + vary * node_size * dist
+			pygame.draw.circle(screen,(255,255,255),(x,y),node_size)	#塗りつぶし
+			pygame.draw.circle(screen,(0,0,0),(x,y),node_size,2)	#枠
+		 
+
+
 def make_node(SCR_WIDTH,SCR_HEIGHT,node,nodex,nodey):
 	node_size = 20
 	node_num = 0
 	dist = 10
 	for vary in range(0,nodey):
 		for varx in range (0,nodex):
+			node.append(Nodeclass())
 			x =10  + node_size * 2 + varx * node_size * dist
 			y =10  + node_size * 2 + vary * node_size * dist
 
-			node.append(Nodeclass())
 			node[node_num].setX(x)
 			node[node_num].setY(y)
 			node_num += 1
-			pygame.draw.circle(screen,(0,0,0),(x,y),node_size)	#塗りつぶしなし
-	print (node_num)
-#辺を作成していく
+
 ###########################木の作成##################################
-	for num in range(0,nodex*nodey):
-		flg = 0
-		while flg <= 1:
-			flg2 = 0
-			destNode = random.randint(0,nodex*nodey - 1)
-			if num == destNode :
-				flg2 = 1
-		
-			if node[num].getN() != 0:
-				for port in range(0,node[num].getN()):
-					if node[num].getDest(port) == destNode :
-						flg2 = 1
+	node_num = 0
+	for vary in range (0,nodey):
+		for varx in range(0,nodex):
+			if vary == nodey-1 and varx == nodex-1:
+				hoge = 0
+			else:
+				if vary == nodey-1:
+					con = random.randint(0,1)
+					if con == 1:
+						set_destNode(node_num,node_num + 1)
+						draw_Line(node_num,node_num + 1)
+
+				else :
+					if varx == 0:
+						for hoge in range(0,3):
+							con = random.randint(0,1)
+							if con == 1:
+								if hoge == 0:
+									set_destNode(node_num,node_num + 1)
+									draw_Line(node_num,node_num + 1)
+								else:
+									set_destNode(node_num,node_num + nodex + hoge - 1)
+									draw_Line(node_num,node_num + nodex + hoge - 1)
+
+							
+					elif varx == nodex-1:
+						for hoge in range(0,1):
+							con = random.randint(0,1)
+							if con == 1:
+								set_destNode(node_num,node_num + nodex + hoge  - 1)
+								draw_Line(node_num,node_num + nodex + hoge - 1)
 
 
-			if flg2 == 0 :
-				set_destNode(num,destNode)
-				draw_Line(num,destNode)
-				flg += 1
-
-			
-
-			print (str(num) + " -> " + str(destNode))
-
-
-
-
+					else:
+						for hoge in range(0,4):
+							con = random.randint(0,1)
+							if con == 1:
+								if hoge == 0:
+									set_destNode(node_num,node_num + 1)
+									draw_Line(node_num,node_num + 1)
+								else:
+									set_destNode(node_num,node_num + nodex + hoge - 2)
+									draw_Line(node_num,node_num + nodex + hoge - 2)
 
 
+						
+			node_num += 1
 
 
 
 
 
 #############################################################################################################################
-
-
-
-
-
-
 
 pygame.init()
 SCR_WIDTH,SCR_HEIGHT = 1280,960
@@ -109,6 +133,8 @@ nodey = 5
 node_num = nodex * nodey
 
 make_node(SCR_WIDTH,SCR_HEIGHT,node,nodex,nodey)
+print ("wire comp")
+draw_node(SCR_WIDTH,SCR_HEIGHT,node,nodex,nodey)
 #表示
 pygame.display.update()
 
